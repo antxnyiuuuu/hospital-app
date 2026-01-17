@@ -7,7 +7,8 @@ import {
     LayoutDashboard,
     UserCog,
     Users,
-    Calendar
+    Calendar,
+    ScrollText
 } from 'lucide-react';
 
 const menuItems = [
@@ -30,6 +31,11 @@ const menuItems = [
         name: 'Consultas',
         href: '/consultas',
         icon: Calendar,
+    },
+    {
+        name: 'Recetas',
+        href: '/recetas',
+        icon: ScrollText,
     },
 ];
 
