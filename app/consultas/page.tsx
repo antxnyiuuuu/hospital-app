@@ -130,70 +130,96 @@ export default function ConsultasPage() {
         return doctor ? `Dr. ${doctor.nombre} ${doctor.apellido}` : 'N/A';
     };
 
+    const inputClasses = "w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all";
+    const labelClasses = "block text-sm font-semibold text-gray-700 mb-1.5";
+
     if (loading) {
         return <LoadingSpinner text="Cargando consultas..." />;
     }
 
     return (
-        <div>
+        <div className="max-w-7xl mx-auto">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Consultas</h1>
-                    <p className="text-gray-600 mt-1">Gestión de consultas médicas</p>
+                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Consultas</h1>
+                    <p className="text-gray-500 mt-1 text-lg">Programación y gestión de citas médicas</p>
                 </div>
-                <Button onClick={() => handleOpenModal()}>
-                    <Plus className="w-5 h-5 mr-2" />
-                    Nueva Consulta
-                </Button>
+                <div className="flex-shrink-0">
+                    <Button onClick={() => handleOpenModal()} className="shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-shadow">
+                        <Plus className="w-5 h-5 mr-2" />
+                        Nueva Consulta
+                    </Button>
+                </div>
             </div>
 
-            {/* Tabla de Consultas */}
-            {consultas.length === 0 ? (
-                <div className="bg-white rounded-lg shadow p-8 text-center">
-                    <p className="text-gray-500">No hay consultas registradas</p>
+            {/* Main Content Card */}
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden relative">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-600 to-purple-500"></div>
+                <div className="p-6 border-b border-gray-100 bg-white flex justify-between items-center">
+                    <h3 className="text-xl font-bold text-gray-800 tracking-tight">Agenda de Consultas</h3>
+                    <span className="text-xs font-bold text-violet-600 bg-violet-50 px-3 py-1.5 rounded-full border border-violet-100 uppercase tracking-wide">
+                        {consultas.length} Registros
+                    </span>
                 </div>
-            ) : (
-                <Table headers={['ID', 'Fecha', 'Paciente', 'Doctor', 'Motivo', 'Acciones']}>
-                    {consultas.map((consulta) => (
-                        <tr key={consulta.id_consulta} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {consulta.id_consulta}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {new Date(consulta.fecha).toLocaleString()}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {getPacienteNombre(consulta.pacienteId)}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {getDoctorNombre(consulta.doctorId)}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-900">
-                                <div className="max-w-xs truncate" title={consulta.motivo}>
-                                    {consulta.motivo}
-                                </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => handleOpenModal(consulta)}
-                                        className="text-blue-600 hover:text-blue-800"
-                                    >
-                                        <Edit2 className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(consulta.id_consulta)}
-                                        className="text-red-600 hover:text-red-800"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                </Table>
-            )}
+
+                {consultas.length === 0 ? (
+                    <div className="p-16 text-center">
+                        <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Plus className="w-10 h-10 text-gray-300" />
+                        </div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-1">No hay consultas</h3>
+                        <p className="text-gray-500 mb-6 max-w-sm mx-auto">Programa las consultas médicas seleccionando un paciente y un doctor.</p>
+                        <Button variant="secondary" onClick={() => handleOpenModal()}>
+                            Agendar primera cita
+                        </Button>
+                    </div>
+                ) : (
+                    <div className="p-0">
+                        <Table headers={['ID', 'Fecha', 'Paciente', 'Doctor', 'Motivo', 'Acciones']}>
+                            {consultas.map((consulta) => (
+                                <tr key={consulta.id_consulta} className="group hover:bg-blue-50/50 transition-colors">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        #{consulta.id_consulta}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
+                                        {new Date(consulta.fecha).toLocaleString()}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        {getPacienteNombre(consulta.pacienteId)}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        {getDoctorNombre(consulta.doctorId)}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-gray-500">
+                                        <div className="max-w-xs truncate" title={consulta.motivo}>
+                                            {consulta.motivo}
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+                                        <div className="flex gap-2 justify-end">
+                                            <button
+                                                onClick={() => handleOpenModal(consulta)}
+                                                className="p-1 rounded-md text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                                                title="Editar"
+                                            >
+                                                <Edit2 className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(consulta.id_consulta)}
+                                                className="p-1 rounded-md text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+                                                title="Eliminar"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </Table>
+                    </div>
+                )}
+            </div>
 
             {/* Modal de Crear/Editar Consulta */}
             <Modal
@@ -201,93 +227,82 @@ export default function ConsultasPage() {
                 onClose={handleCloseModal}
                 title={editingConsulta ? 'Editar Consulta' : 'Nueva Consulta'}
             >
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Fecha y Hora
-                        </label>
+                        <label className={labelClasses}>Fecha y Hora</label>
                         <input
                             type="datetime-local"
                             {...register('fecha', { required: 'La fecha es requerida' })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className={inputClasses}
                         />
                         {errors.fecha && (
-                            <p className="text-red-500 text-sm mt-1">{errors.fecha.message}</p>
+                            <p className="text-red-500 text-xs mt-1 font-medium">{errors.fecha.message}</p>
                         )}
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Paciente
-                        </label>
-                        <select
-                            {...register('pacienteId', {
-                                required: 'El paciente es requerido',
-                                valueAsNumber: true,
-                            })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="">Seleccione un paciente</option>
-                            {pacientes.map((paciente) => (
-                                <option key={paciente.id_paciente} value={paciente.id_paciente}>
-                                    {paciente.nombre} {paciente.apellido} - {paciente.cedula}
-                                </option>
-                            ))}
-                        </select>
-                        {errors.pacienteId && (
-                            <p className="text-red-500 text-sm mt-1">{errors.pacienteId.message}</p>
-                        )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className={labelClasses}>Paciente</label>
+                            <select
+                                {...register('pacienteId', {
+                                    required: 'Requerido',
+                                    valueAsNumber: true,
+                                })}
+                                className={inputClasses}
+                            >
+                                <option value="">Seleccione...</option>
+                                {pacientes.map((paciente) => (
+                                    <option key={paciente.id_paciente} value={paciente.id_paciente}>
+                                        {paciente.nombre} {paciente.apellido}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.pacienteId && (
+                                <p className="text-red-500 text-xs mt-1 font-medium">{errors.pacienteId.message}</p>
+                            )}
+                        </div>
+
+                        <div>
+                            <label className={labelClasses}>Doctor</label>
+                            <select
+                                {...register('doctorId', {
+                                    required: 'Requerido',
+                                    valueAsNumber: true,
+                                })}
+                                className={inputClasses}
+                            >
+                                <option value="">Seleccione...</option>
+                                {doctores.map((doctor) => (
+                                    <option key={doctor.id_doctor} value={doctor.id_doctor}>
+                                        Dr. {doctor.nombre} {doctor.apellido}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.doctorId && (
+                                <p className="text-red-500 text-xs mt-1 font-medium">{errors.doctorId.message}</p>
+                            )}
+                        </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Doctor
-                        </label>
-                        <select
-                            {...register('doctorId', {
-                                required: 'El doctor es requerido',
-                                valueAsNumber: true,
-                            })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        >
-                            <option value="">Seleccione un doctor</option>
-                            {doctores.map((doctor) => (
-                                <option key={doctor.id_doctor} value={doctor.id_doctor}>
-                                    Dr. {doctor.nombre} {doctor.apellido} - {doctor.especialidad.nombre}
-                                </option>
-                            ))}
-                        </select>
-                        {errors.doctorId && (
-                            <p className="text-red-500 text-sm mt-1">{errors.doctorId.message}</p>
-                        )}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Motivo de Consulta
-                        </label>
+                        <label className={labelClasses}>Motivo de Consulta</label>
                         <textarea
-                            {...register('motivo', { required: 'El motivo es requerido' })}
-                            rows={4}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Describa el motivo de la consulta..."
+                            {...register('motivo', { required: 'Requerido' })}
+                            rows={3}
+                            className={inputClasses}
+                            placeholder="Describa el motivo..."
                         />
                         {errors.motivo && (
-                            <p className="text-red-500 text-sm mt-1">{errors.motivo.message}</p>
+                            <p className="text-red-500 text-xs mt-1 font-medium">{errors.motivo.message}</p>
                         )}
                     </div>
 
-                    <div className="flex gap-3 pt-4">
-                        <Button type="submit" disabled={submitting} className="flex-1">
-                            {submitting ? 'Guardando...' : editingConsulta ? 'Actualizar' : 'Crear'}
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            onClick={handleCloseModal}
-                            className="flex-1"
-                        >
+                    <div className="flex gap-3 pt-4 border-t border-gray-100 mt-6">
+                        <Button type="button" variant="secondary" onClick={handleCloseModal} className="flex-1">
                             Cancelar
+                        </Button>
+                        <Button type="submit" disabled={submitting} className="flex-1">
+                            {submitting ? 'Guardando...' : editingConsulta ? 'Guardar Cambios' : 'Agendar Cita'}
                         </Button>
                     </div>
                 </form>

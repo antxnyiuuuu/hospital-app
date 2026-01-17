@@ -12,7 +12,7 @@ import type {
 } from '@/types';
 
 // Base URL del backend Spring Boot
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'http://localhost:8082/api';
 
 // Configuración de axios
 const api = axios.create({

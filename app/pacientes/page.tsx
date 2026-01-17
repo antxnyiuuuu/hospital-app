@@ -129,80 +129,104 @@ export default function PacientesPage() {
         }
     };
 
+    const inputClasses = "w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all";
+    const labelClasses = "block text-sm font-semibold text-gray-700 mb-1.5";
+
     if (loading) {
         return <LoadingSpinner text="Cargando pacientes..." />;
     }
 
     return (
-        <div>
+        <div className="max-w-7xl mx-auto">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Pacientes</h1>
-                    <p className="text-gray-600 mt-1">Gestión de pacientes del hospital</p>
+                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Pacientes</h1>
+                    <p className="text-gray-500 mt-1 text-lg">Administración de expedientes y datos personales</p>
                 </div>
-                <Button onClick={() => handleOpenModal()}>
-                    <Plus className="w-5 h-5 mr-2" />
-                    Nuevo Paciente
-                </Button>
+                <div className="flex-shrink-0">
+                    <Button onClick={() => handleOpenModal()} className="shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-shadow">
+                        <Plus className="w-5 h-5 mr-2" />
+                        Nuevo Paciente
+                    </Button>
+                </div>
             </div>
 
-            {/* Tabla de Pacientes */}
-            {pacientes.length === 0 ? (
-                <div className="bg-white rounded-lg shadow p-8 text-center">
-                    <p className="text-gray-500">No hay pacientes registrados</p>
+            {/* Main Content Card */}
+            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden relative">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+                <div className="p-6 border-b border-gray-100 bg-white flex justify-between items-center">
+                    <h3 className="text-xl font-bold text-gray-800 tracking-tight">Directorio de Pacientes</h3>
+                    <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100 uppercase tracking-wide">
+                        {pacientes.length} Registros
+                    </span>
                 </div>
-            ) : (
-                <Table headers={['ID', 'Nombre', 'Apellido', 'Cédula', 'Fecha Nac.', 'Teléfono', 'Acciones']}>
-                    {pacientes.map((paciente) => (
-                        <tr key={paciente.id_paciente} className="hover:bg-gray-50">
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {paciente.id_paciente}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {paciente.nombre}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {paciente.apellido}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {paciente.cedula}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {new Date(paciente.fecha_nacimiento).toLocaleDateString()}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {paciente.telefono}
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                <div className="flex gap-2">
-                                    <button
-                                        onClick={() => handleOpenHistorial(paciente)}
-                                        className="text-green-600 hover:text-green-800"
-                                        title="Ver historial"
-                                    >
-                                        <FileText className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                        onClick={() => handleOpenModal(paciente)}
-                                        className="text-blue-600 hover:text-blue-800"
-                                        title="Editar"
-                                    >
-                                        <Edit2 className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(paciente.id_paciente)}
-                                        className="text-red-600 hover:text-red-800"
-                                        title="Eliminar"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    ))}
-                </Table>
-            )}
+
+                {pacientes.length === 0 ? (
+                    <div className="p-16 text-center">
+                        <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Plus className="w-10 h-10 text-gray-300" />
+                        </div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-1">No hay pacientes</h3>
+                        <p className="text-gray-500 mb-6 max-w-sm mx-auto">Registra nuevos pacientes para comenzar a gestionar sus historiales y citas.</p>
+                        <Button variant="secondary" onClick={() => handleOpenModal()}>
+                            Registrar primero
+                        </Button>
+                    </div>
+                ) : (
+                    <div className="p-0">
+                        <Table headers={['ID', 'Nombre', 'Apellido', 'Cédula', 'Fecha Nac.', 'Teléfono', 'Acciones']}>
+                            {pacientes.map((paciente) => (
+                                <tr key={paciente.id_paciente} className="group hover:bg-blue-50/50 transition-colors">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        #{paciente.id_paciente}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
+                                        {paciente.nombre}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
+                                        {paciente.apellido}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {paciente.cedula}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {new Date(paciente.fecha_nacimiento).toLocaleDateString()}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {paciente.telefono}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+                                        <div className="flex gap-2 justify-end">
+                                            <button
+                                                onClick={() => handleOpenHistorial(paciente)}
+                                                className="p-1 rounded-md text-green-600 hover:bg-green-50 hover:text-green-700 transition-colors"
+                                                title="Ver historial"
+                                            >
+                                                <FileText className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleOpenModal(paciente)}
+                                                className="p-1 rounded-md text-blue-600 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                                                title="Editar"
+                                            >
+                                                <Edit2 className="w-4 h-4" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(paciente.id_paciente)}
+                                                className="p-1 rounded-md text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+                                                title="Eliminar"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </Table>
+                    </div>
+                )}
+            </div>
 
             {/* Modal de Crear/Editar Paciente */}
             <Modal
@@ -210,63 +234,70 @@ export default function PacientesPage() {
                 onClose={handleCloseModal}
                 title={editingPaciente ? 'Editar Paciente' : 'Nuevo Paciente'}
             >
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                        <input
-                            type="text"
-                            {...register('nombre', { required: 'El nombre es requerido' })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        {errors.nombre && <p className="text-red-500 text-sm mt-1">{errors.nombre.message}</p>}
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className={labelClasses}>Nombre</label>
+                            <input
+                                type="text"
+                                {...register('nombre', { required: 'Requerido' })}
+                                className={inputClasses}
+                                placeholder="Ej. Ana"
+                            />
+                            {errors.nombre && <p className="text-red-500 text-xs mt-1 font-medium">{errors.nombre.message}</p>}
+                        </div>
+
+                        <div>
+                            <label className={labelClasses}>Apellido</label>
+                            <input
+                                type="text"
+                                {...register('apellido', { required: 'Requerido' })}
+                                className={inputClasses}
+                                placeholder="Ej. López"
+                            />
+                            {errors.apellido && <p className="text-red-500 text-xs mt-1 font-medium">{errors.apellido.message}</p>}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className={labelClasses}>Cédula</label>
+                            <input
+                                type="text"
+                                {...register('cedula', { required: 'Requerida' })}
+                                className={inputClasses}
+                                placeholder="10 dígitos"
+                            />
+                            {errors.cedula && <p className="text-red-500 text-xs mt-1 font-medium">{errors.cedula.message}</p>}
+                        </div>
+                        <div>
+                            <label className={labelClasses}>Teléfono</label>
+                            <input
+                                type="tel"
+                                {...register('telefono', { required: 'Requerido' })}
+                                className={inputClasses}
+                                placeholder="09..."
+                            />
+                            {errors.telefono && <p className="text-red-500 text-xs mt-1 font-medium">{errors.telefono.message}</p>}
+                        </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Apellido</label>
-                        <input
-                            type="text"
-                            {...register('apellido', { required: 'El apellido es requerido' })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        {errors.apellido && <p className="text-red-500 text-sm mt-1">{errors.apellido.message}</p>}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Cédula</label>
-                        <input
-                            type="text"
-                            {...register('cedula', { required: 'La cédula es requerida' })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        {errors.cedula && <p className="text-red-500 text-sm mt-1">{errors.cedula.message}</p>}
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Nacimiento</label>
+                        <label className={labelClasses}>Fecha de Nacimiento</label>
                         <input
                             type="date"
-                            {...register('fecha_nacimiento', { required: 'La fecha de nacimiento es requerida' })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            {...register('fecha_nacimiento', { required: 'Requerida' })}
+                            className={inputClasses}
                         />
-                        {errors.fecha_nacimiento && <p className="text-red-500 text-sm mt-1">{errors.fecha_nacimiento.message}</p>}
+                        {errors.fecha_nacimiento && <p className="text-red-500 text-xs mt-1 font-medium">{errors.fecha_nacimiento.message}</p>}
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                        <input
-                            type="tel"
-                            {...register('telefono', { required: 'El teléfono es requerido' })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                        {errors.telefono && <p className="text-red-500 text-sm mt-1">{errors.telefono.message}</p>}
-                    </div>
-
-                    <div className="flex gap-3 pt-4">
-                        <Button type="submit" disabled={submitting} className="flex-1">
-                            {submitting ? 'Guardando...' : editingPaciente ? 'Actualizar' : 'Crear'}
-                        </Button>
+                    <div className="flex gap-3 pt-4 border-t border-gray-100 mt-6">
                         <Button type="button" variant="secondary" onClick={handleCloseModal} className="flex-1">
                             Cancelar
+                        </Button>
+                        <Button type="submit" disabled={submitting} className="flex-1">
+                            {submitting ? 'Guardando...' : editingPaciente ? 'Guardar Cambios' : 'Crear Paciente'}
                         </Button>
                     </div>
                 </form>
@@ -281,15 +312,19 @@ export default function PacientesPage() {
                 {loadingHistorial ? (
                     <LoadingSpinner text="Cargando historial..." />
                 ) : historiales.length === 0 ? (
-                    <p className="text-gray-500 text-center py-4">No hay registros en el historial médico</p>
+                    <div className="text-center py-8 bg-gray-50 rounded-lg border border-gray-100 border-dashed">
+                        <FileText className="w-10 h-10 text-gray-300 mx-auto mb-2" />
+                        <p className="text-gray-500 font-medium">Sin registros médicos previos</p>
+                    </div>
                 ) : (
                     <div className="space-y-4">
                         {historiales.map((historial) => (
-                            <div key={historial.id_historial} className="border border-gray-200 rounded-lg p-4">
-                                <div className="flex justify-between items-start mb-2">
-                                    <span className="text-sm font-medium text-gray-500">ID: {historial.id_historial}</span>
+                            <div key={historial.id_historial} className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                                <div className="flex justify-between items-center mb-3 pb-2 border-b border-gray-100">
+                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wide">REGISTRO #{historial.id_historial}</span>
+                                    <span className="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium">Activo</span>
                                 </div>
-                                <p className="text-gray-700">{historial.descripcion}</p>
+                                <p className="text-gray-700 leading-relaxed text-sm">{historial.descripcion}</p>
                             </div>
                         ))}
                     </div>
