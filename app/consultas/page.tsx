@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
-import { consultasApi, pacientesApi, doctoresApi } from '@/lib/api';
+import { mockPacientes } from '@/lib/mockData';
+import { consultasApi, doctoresApi } from '@/lib/api';
 import type { Consulta, ConsultaFormData, Paciente, Doctor } from '@/types';
 import Table from '@/components/ui/Table';
 import Button from '@/components/ui/Button';
@@ -23,8 +24,8 @@ export default function ConsultasPage() {
 
     useEffect(() => {
         fetchConsultas();
-        fetchPacientes();
         fetchDoctores();
+        setPacientes(mockPacientes);
     }, []);
 
     const fetchConsultas = async () => {
@@ -37,15 +38,6 @@ export default function ConsultasPage() {
             alert('Error al cargar la lista de consultas');
         } finally {
             setLoading(false);
-        }
-    };
-
-    const fetchPacientes = async () => {
-        try {
-            const data = await pacientesApi.getAll();
-            setPacientes(data);
-        } catch (error) {
-            console.error('Error al cargar pacientes:', error);
         }
     };
 
