@@ -1,0 +1,20 @@
+[
+    {
+      "id": 1,
+      "dosis": "1 tableta cada 8 horas",
+      "medicamento": "Paracetamol 500mg",
+      "id_consulta": 101
+    },
+    {
+      "id": 2,
+      "dosis": "5ml cada 12 horas",
+      "medicamento": "Amoxicilina Suspensión",
+      "id_consulta": 102
+    },
+    {
+      "id": 3,
+      "dosis": "1 cápsula en ayunas",
+      "medicamento": "Omeprazol 20mg",
+      "id_consulta": 101
+    }
+  ]

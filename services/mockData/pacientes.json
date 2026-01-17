@@ -1,0 +1,26 @@
+[
+    {
+      "id": 1,
+      "nombre": "Juan Carlos",
+      "apellido": "Armas",
+      "cedula": "1723456789",
+      "edad": 35,
+      "telefono": "0998765432"
+    },
+    {
+      "id": 2,
+      "nombre": "María Belén",
+      "apellido": "Ortiz",
+      "cedula": "1755566677",
+      "edad": 24,
+      "telefono": "0984443332"
+    },
+    {
+      "id": 3,
+      "nombre": "Ricardo",
+      "apellido": "Pérez",
+      "cedula": "1002003004",
+      "edad": 62,
+      "telefono": "0971112223"
+    }
+  ]
