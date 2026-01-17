@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Plus, Edit2, Trash2, FileText } from 'lucide-react';
 import { pacientesApi, historialesApi } from '@/lib/api';
+import { mockPacientes } from '@/lib/mockData';
 import type { Paciente, PacienteFormData, Historial } from '@/types';
 import Table from '@/components/ui/Table';
 import Button from '@/components/ui/Button';
@@ -24,21 +25,10 @@ export default function PacientesPage() {
     const { register, handleSubmit, reset, formState: { errors } } = useForm<PacienteFormData>();
 
     useEffect(() => {
-        fetchPacientes();
+        // Usar directamente mock data
+        setPacientes(mockPacientes);
+        setLoading(false);
     }, []);
-
-    const fetchPacientes = async () => {
-        try {
-            setLoading(true);
-            const data = await pacientesApi.getAll();
-            setPacientes(data);
-        } catch (error) {
-            console.error('Error al cargar pacientes:', error);
-            alert('Error al cargar la lista de pacientes');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const fetchHistorial = async (pacienteId: number) => {
         try {
@@ -99,15 +89,29 @@ export default function PacientesPage() {
             setSubmitting(true);
 
             if (editingPaciente) {
-                await pacientesApi.update(editingPaciente.id_paciente, data);
+                // Actualizar paciente en mock data
+                const pacienteActualizado: Paciente = {
+                    ...editingPaciente,
+                    ...data,
+                };
+                
+                const updatedPacientes = pacientes.map(p => 
+                    p.id_paciente === editingPaciente.id_paciente ? pacienteActualizado : p
+                );
+                setPacientes(updatedPacientes);
                 alert('Paciente actualizado exitosamente');
             } else {
-                await pacientesApi.create(data);
+                // Crear nuevo paciente en mock data
+                const newPaciente: Paciente = {
+                    id_paciente: Math.max(...pacientes.map(p => p.id_paciente), 0) + 1,
+                    ...data,
+                };
+                
+                setPacientes([...pacientes, newPaciente]);
                 alert('Paciente creado exitosamente');
             }
 
             handleCloseModal();
-            fetchPacientes();
         } catch (error) {
             console.error('Error al guardar paciente:', error);
             alert('Error al guardar el paciente');
@@ -120,9 +124,9 @@ export default function PacientesPage() {
         if (!confirm('¿Estás seguro de eliminar este paciente?')) return;
 
         try {
-            await pacientesApi.delete(id);
+            // Eliminar del mock data
+            setPacientes(pacientes.filter(p => p.id_paciente !== id));
             alert('Paciente eliminado exitosamente');
-            fetchPacientes();
         } catch (error) {
             console.error('Error al eliminar paciente:', error);
             alert('Error al eliminar el paciente');

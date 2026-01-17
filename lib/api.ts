@@ -11,10 +11,8 @@ import type {
     Receta
 } from '@/types';
 
-// Base URL del backend Spring Boot
-const API_BASE_URL = 'http://localhost:8082/api';
+const API_BASE_URL = 'http://localhost:8080/api';
 
-// Configuración de axios
 const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
@@ -22,7 +20,6 @@ const api = axios.create({
     },
 });
 
-// ==================== ESPECIALIDADES ====================
 export const especialidadesApi = {
     getAll: async (): Promise<Especialidad[]> => {
         const response = await api.get<Especialidad[]>('/especialidad');
@@ -35,7 +32,6 @@ export const especialidadesApi = {
     },
 };
 
-// ==================== DOCTORES ====================
 export const doctoresApi = {
     getAll: async (): Promise<Doctor[]> => {
         const response = await api.get<Doctor[]>('/doctor');
@@ -62,7 +58,6 @@ export const doctoresApi = {
     },
 };
 
-// ==================== PACIENTES ====================
 export const pacientesApi = {
     getAll: async (): Promise<Paciente[]> => {
         const response = await api.get<Paciente[]>('/paciente');
@@ -89,7 +84,6 @@ export const pacientesApi = {
     },
 };
 
-// ==================== CONSULTAS ====================
 export const consultasApi = {
     getAll: async (): Promise<Consulta[]> => {
         const response = await api.get<Consulta[]>('/consulta');
@@ -116,7 +110,6 @@ export const consultasApi = {
     },
 };
 
-// ==================== HISTORIALES ====================
 export const historialesApi = {
     getAll: async (): Promise<Historial[]> => {
         const response = await api.get<Historial[]>('/historiales');
@@ -134,7 +127,6 @@ export const historialesApi = {
     },
 };
 
-// ==================== RECETAS ====================
 export const recetasApi = {
     getAll: async (): Promise<Receta[]> => {
         const response = await api.get<Receta[]>('/recetas');

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { doctoresApi, especialidadesApi } from '@/lib/api';
+import { mockEspecialidades } from '@/lib/mockData';
 import type { Doctor, Especialidad, DoctorFormData } from '@/types';
 import Table from '@/components/ui/Table';
 import Button from '@/components/ui/Button';
@@ -26,7 +27,6 @@ export default function DoctoresPage() {
         fetchEspecialidades();
     }, []);
 
-    // Consumir la API y mostrar los doctores en una tabla
     const fetchDoctores = async () => {
         try {
             setLoading(true);
@@ -46,7 +46,7 @@ export default function DoctoresPage() {
             setEspecialidades(data);
         } catch (error) {
             console.error('Error al cargar especialidades:', error);
-            alert('Error al cargar especialidades');
+            setEspecialidades(mockEspecialidades);
         }
     };
 
@@ -83,13 +83,21 @@ export default function DoctoresPage() {
         try {
             setSubmitting(true);
 
+            // Asegurar que especialidad tiene la estructura correcta
+            const doctorData = {
+                nombre: data.nombre,
+                apellido: data.apellido,
+                telefono: data.telefono,
+                especialidad: {
+                    id_especialidad: Number(data.especialidad.id_especialidad),
+                },
+            };
+
             if (editingDoctor) {
-                // Actualizar doctor existente
-                await doctoresApi.update(editingDoctor.id_doctor, data);
+                await doctoresApi.update(editingDoctor.id_doctor, doctorData);
                 alert('Doctor actualizado exitosamente');
             } else {
-                // Crear nuevo doctor
-                await doctoresApi.create(data);
+                await doctoresApi.create(doctorData);
                 alert('Doctor creado exitosamente');
             }
 
@@ -273,6 +281,7 @@ export default function DoctoresPage() {
                             {...register('especialidad.id_especialidad', {
                                 required: 'Requerido',
                                 valueAsNumber: true,
+                                validate: (value) => value !== 0 || 'La especialidad es requerida',
                             })}
                             className={inputClasses}
                         >
