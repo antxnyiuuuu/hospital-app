@@ -26,6 +26,7 @@ export default function DoctoresPage() {
         fetchEspecialidades();
     }, []);
 
+    // Consumir la API y mostrar los doctores en una tabla
     const fetchDoctores = async () => {
         try {
             setLoading(true);
