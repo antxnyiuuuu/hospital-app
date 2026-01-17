@@ -129,8 +129,8 @@ export default function PacientesPage() {
         }
     };
 
-    const inputClasses = "w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all";
-    const labelClasses = "block text-sm font-semibold text-gray-700 mb-1.5";
+    const inputClasses = "w-full px-4 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors";
+    const labelClasses = "block text-sm font-medium text-gray-700 mb-1";
 
     if (loading) {
         return <LoadingSpinner text="Cargando pacientes..." />;
@@ -138,14 +138,18 @@ export default function PacientesPage() {
 
     return (
         <div className="max-w-7xl mx-auto">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            {/* Page Header */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <div>
-                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Pacientes</h1>
-                    <p className="text-gray-500 mt-1 text-lg">Administración de expedientes y datos personales</p>
+                    <h1 className="text-2xl font-bold text-gray-900">
+                        Pacientes
+                    </h1>
+                    <p className="text-gray-500">
+                        Gestiona el directorio de pacientes e historiales
+                    </p>
                 </div>
                 <div className="flex-shrink-0">
-                    <Button onClick={() => handleOpenModal()} className="shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-shadow">
+                    <Button onClick={() => handleOpenModal()} className="shadow-none">
                         <Plus className="w-5 h-5 mr-2" />
                         Nuevo Paciente
                     </Button>
@@ -153,11 +157,10 @@ export default function PacientesPage() {
             </div>
 
             {/* Main Content Card */}
-            <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden relative">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
-                <div className="p-6 border-b border-gray-100 bg-white flex justify-between items-center">
-                    <h3 className="text-xl font-bold text-gray-800 tracking-tight">Directorio de Pacientes</h3>
-                    <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100 uppercase tracking-wide">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                    <h3 className="text-lg font-medium text-gray-900">Directorio de Pacientes</h3>
+                    <span className="text-xs font-medium text-gray-500 bg-gray-200 px-2.5 py-0.5 rounded-full border border-gray-300">
                         {pacientes.length} Registros
                     </span>
                 </div>
